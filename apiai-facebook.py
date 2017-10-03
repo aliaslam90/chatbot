@@ -8,6 +8,10 @@ import os
 file1 = open("data.csv", encoding = "utf8")
 file = list(file1)	#saves dataset as list
 
+#reading the roman URDU dictionary
+with open('Dictionary.pickle', 'rb') as handle:
+    dictionaryRomanUrdu = pickle.load(handle)
+
 try:
     import apiai
 except ImportError:
@@ -128,7 +132,7 @@ def standardize_message_text(text):
     '''
     use the roman urdu dictionary to standardize text and return a standardized message text
     '''
-    out_list = ""
+    '''out_list = ""
     i = 0
 	
     while i < len(text):
@@ -151,7 +155,21 @@ def standardize_message_text(text):
                 out_list = out_list + " " + word
             #print (word)
         i = i+1
-    return out_list   #returns normalized input
+    return out_list   #returns normalized input'''
+	
+	#sms='kia aadatein aaaaaaaaaaaa aachi'
+	tokenizedWords=text.split(' ')
+	
+	#iterating through thr token of the input sentence
+	for word in tokenizedWords:  
+	    for key, value in dictionaryRomanUrdu.items():
+		if(word in value):
+		    indexInList=tokenizedWords.index(word)
+		    tokenizedWords[indexInList]=key
+
+	return " ".join(str(x) for x in tokenizedWords)
+	
+
 
 
 if __name__ == '__main__':
